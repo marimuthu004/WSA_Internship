@@ -11,7 +11,7 @@ import store from "./redux/store";
 import Login from "./Components/user/Login";
 import Register from "./Components/user/Register";
 import Profile from "./Components/user/Profile";
-import UpdateProfile from "./components/user/UpdateProfile";
+import UpdateProfile from "./Components/user/UpdateProfile";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
