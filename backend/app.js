@@ -3,7 +3,7 @@ const app = express();
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-// const cloudinary = require("cloudinary");
+const cloudinary = require("cloudinary");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
 
@@ -13,11 +13,11 @@ const errorMiddleware = require("./middlewares/errors");
 
 app.use(
   cors({
-    // origin: "https://genie-food-app.netlify.app",
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
     credentials: true,
-  }),
+  })
 );
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());

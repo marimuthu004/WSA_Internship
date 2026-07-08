@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-console.log("KEY", process.env.STRIPE_SECRET_KEY);
+
 
 exports.processPayment = catchAsyncErrors(async (req, res, next) => {
   console.log(req.body);
