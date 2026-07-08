@@ -2,24 +2,24 @@ import React, { useEffect } from "react";
 
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
-import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
-import Menu from "./components/Menu";
+import Home from "./Components/Home";
+import Header from "./Components/layout/Header";
+import Footer from "./Components/layout/Footer";
+import Menu from "./Components/Menu";
 import { loadUser } from "./redux/actions/userActions";
 import store from "./redux/store";
-import Login from "./components/user/Login";
-import Register from "./components/user/Register";
-import Profile from "./components/user/Profile";
+import Login from "./Components/user/Login";
+import Register from "./Components/user/Register";
+import Profile from "./Components/user/Profile";
 import UpdateProfile from "./components/user/UpdateProfile";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Cart from "./components/cart/Cart";
+import Cart from "./Components/cart/Cart";
 
-import OrderSuccess from "./components/cart/OrderSuccess";
-import ListOrders from "./components/order/ListOrders";
-import OrderDetails from "./components/order/OrderDetails";
+import OrderSuccess from "./Components/cart/OrderSuccess";
+import ListOrders from "./Components/order/ListOrders";
+import OrderDetails from "./Components/order/OrderDetails";
 
 function App() {
   useEffect(() => {
