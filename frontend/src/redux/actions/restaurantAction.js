@@ -12,7 +12,7 @@ export const getRestaurants = createAsyncThunk(
     "restaurants/getRestaurants",async(keyword =" ",{rejectWithValue}) =>{
        try{
         //API call
-        const {data} = await api.get(`/v1/eats/stores?keyword=${keyword}`);
+        const {data} = await api.get(`/api/v1/eats/stores?keyword=${encodeURIComponent(keyword || "")}`);
         console.log("Fetched restaurants",data);
         return {
             restaurants : data.restaurants,
@@ -28,7 +28,7 @@ export const getRestaurants = createAsyncThunk(
  export const createRestaurant = createAsyncThunk(
   "restaurants/createRestaurant", async(restaurantData,{rejectWithValue}) =>{
     try{
-      const {data} = await api.post("/v1/eats/stores", restaurantData);
+      const {data} = await api.post("/api/v1/eats/stores", restaurantData);
       return data;
     }catch(error){
         return rejectWithValue(error.response?.data?.message || error.message)
@@ -42,7 +42,7 @@ export const getRestaurants = createAsyncThunk(
   export const deleteRestaurant = createAsyncThunk(
   "restaurants/deleteRestaurant", async(id,{rejectWithValue}) =>{
     try{
-      const {data} = await api.delete(`/v1/eats/stores/${id}`);
+      const {data} = await api.delete(`/api/v1/eats/stores/${id}`);
       return {
         id,
         message:data.message
@@ -57,7 +57,7 @@ export const getRestaurants = createAsyncThunk(
  export const analyzeReviews = createAsyncThunk(
   "restuarants/analyzeReviews", async(id, {rejectWithValue}) =>{
     try{
-      const {data} = await api.put(`/v1/ai/admin/restaurants/${id}/analyze`)
+      const {data} = await api.put(`/api/v1/ai/admin/restaurants/${id}/analyze`)
 
       return{
         restaurantId: id,

@@ -19,7 +19,7 @@ export const fetchCartItems =() =>async(dispatch) =>{
     try{
        dispatch(cartRequest());
 
-       const {data} = await api.get("/v1/eats/cart/get-cart");
+       const {data} = await api.get("/api/v1/eats/cart/get-cart");
 
        dispatch(cartSuccess(data.data))
        console.log("CART API", data.data)
@@ -35,7 +35,7 @@ export const addItemToCart =(foodItemId, restaurantId, quantity) =>async(dispatc
 
          const{user} = getState().user;
 
-         const{data} = await api.post("/v1/eats/cart/add-to-cart" ,{
+         const{data} = await api.post("/api/v1/eats/cart/add-to-cart" ,{
             userId:user._id,
             foodItemId,
             restaurantId,
@@ -53,7 +53,7 @@ export const addItemToCart =(foodItemId, restaurantId, quantity) =>async(dispatc
 export const updateCartQuantity = (foodItemId,quantity) => async(dispatch,getState) =>{
     try{
        const {user} = getState().user;
-       const {data} = await api.post("/v1/eats/cart/update-cart-item", {
+       const {data} = await api.post("/api/v1/eats/cart/update-cart-item", {
         userId: user._id,
         foodItemId,
         quantity
@@ -70,7 +70,7 @@ export const removeItemFromCart = (foodItemId) => async(dispatch,getState) =>{
     try{
         const {user} = getState().user;
 
-        const {data} = await api.delete("/v1/eats/cart/delete-cart-item", {
+        const {data} = await api.delete("/api/v1/eats/cart/delete-cart-item", {
             data:{userId:user._id, foodItemId}
         })
 

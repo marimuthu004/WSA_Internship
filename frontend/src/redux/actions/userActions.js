@@ -20,7 +20,7 @@ import {
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch(loginRequest());
-    const { data } = await api.post("/v1/users/login", {
+    const { data } = await api.post("/api/v1/users/login", {
       email,
       password,
     });
@@ -35,7 +35,7 @@ export const register = (userData) => async (dispatch) => {
   try {
     dispatch(loginRequest());
 
-    const { data } = await api.post("/v1/users/signup", userData, {
+    const { data } = await api.post("/api/v1/users/signup", userData, {
       headers: { "Content-Type": "application/json" },
     });
     dispatch(loginSuccess(data.data.user));
@@ -60,7 +60,7 @@ export const loadUser = () => async (dispatch) => {
   try {
     dispatch(loginRequest());
 
-    const { data } = await api.get("/v1/users/me");
+    const { data } = await api.get("/api/v1/users/me");
 
     console.log("loadUser response:", data);
 
@@ -78,7 +78,7 @@ export const updateProfile = (userData) => async (dispatch) => {
   try {
     dispatch(updateRequest());
 
-    const { data } = await api.put("/v1/users/me/update", userData, {
+    const { data } = await api.put("/api/v1/users/me/update", userData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     dispatch(updateSuccess(data.success));
@@ -90,7 +90,7 @@ export const updateProfile = (userData) => async (dispatch) => {
 //logout
 export const logout = () => async (dispatch) => {
   try {
-    await api.get("v1/users/logout");
+    await api.get("/api/v1/users/logout");
     dispatch(logoutSuccess());
   } catch (error) {
     dispatch(logoutFail(error.response?.data?.message));

@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
+const frontendOrigin = (process.env.FRONTEND_URL || "http://localhost:5173").replace(/\/+$/, "");
 
 exports.processPayment = catchAsyncErrors(async (req, res, next) => {
   console.log(req.body);
@@ -49,8 +49,8 @@ exports.processPayment = catchAsyncErrors(async (req, res, next) => {
         },
       },
     ],
-    success_url: `${process.env.FRONTEND_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.FRONTEND_URL}/cart`,
+    success_url: `${frontendOrigin}/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${frontendOrigin}/cart`,
   });
   res.status(200).json({ url: session.url });
 });

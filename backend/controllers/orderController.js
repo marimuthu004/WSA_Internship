@@ -12,13 +12,16 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // Create a new order   =>  /api/v1/order/new
 exports.newOrder = catchAsyncErrors(async (req, res, next) => {
-  // console.log("id", req.body);
   const { session_id } = req.body;
+
+  if (!session_id) {
+    return next(new ErrorHandler("Payment session is required", 400));
+  }
 
   const session = await stripe.checkout.sessions.retrieve(session_id, {
     expand: ["customer"],
   });
-  console.log(session);
+
   const cart = await Cart.findOne({ user: req.user._id })
     .populate({
       path: "items.foodItem",
@@ -28,43 +31,53 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
       path: "restaurant",
       select: "name",
     });
-  console.log(cart);
 
-  let deliveryInfo = {
-    address:
-      session.shipping_details.address.line1 +
-      " " +
-      session.shipping_details.address.line1,
-    city: session.shipping_details.address.city,
-    phoneNo: session.customer_details.phone,
-    postalCode: session.shipping_details.address.postal_code,
-    country: session.shipping_details.address.country,
+  if (!cart || !cart.items || cart.items.length === 0) {
+    return next(new ErrorHandler("Your cart is empty", 400));
+  }
+
+  const shippingAddress =
+    session.shipping_details?.address || session.customer_details?.address || {};
+  const phoneNo = session.customer_details?.phone || "";
+
+  const deliveryInfo = {
+    address: [shippingAddress.line1, shippingAddress.line2]
+      .filter(Boolean)
+      .join(" ") || "Not provided",
+    city: shippingAddress.city || "N/A",
+    phoneNo,
+    postalCode: shippingAddress.postal_code || "",
+    country: shippingAddress.country || "",
   };
-  let orderItems = cart.items.map((item) => ({
+
+  const orderItems = cart.items.map((item) => ({
     name: item.foodItem.name,
     quantity: item.quantity,
-    image: item.foodItem.images[0].url,
+    image: item.foodItem.images?.[0]?.url || "",
     price: item.foodItem.price,
     fooditem: item.foodItem._id,
   }));
 
-  let paymentInfo = {
-    id: session.payment_intent,
-    status: session.payment_status,
+  const paymentInfo = {
+    id: session.payment_intent || session.id,
+    status: session.payment_status || "paid",
   };
+
+  const deliveryCharge = Number(session.shipping_cost?.amount_subtotal || 0) / 100;
+  const itemsPrice = Number(session.amount_subtotal || 0) / 100;
+  const finalTotal = Number(session.amount_total || itemsPrice + deliveryCharge) / 100;
 
   const order = await Order.create({
     orderItems,
     deliveryInfo,
     paymentInfo,
-    deliveryCharge: +session.shipping_cost.amount_subtotal / 100,
-    itemsPrice: +session.amount_subtotal / 100,
-    finalTotal: +session.amount_total / 100,
+    deliveryCharge,
+    itemsPrice,
+    finalTotal,
     user: req.user.id,
-    restaurant: cart.restaurant._id,
+    restaurant: cart.restaurant?._id,
     paidAt: Date.now(),
   });
-  console.log(order);
 
   await Cart.findOneAndDelete({ user: req.user._id });
 

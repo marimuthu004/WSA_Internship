@@ -6,7 +6,7 @@ export const getMenus = createAsyncThunk(
   "menus/getMenus",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await API.get(`/v1/eats/stores/${id}/menus`);
+      const response = await API.get(`/api/v1/eats/stores/${id}/menus`);
 
       let menuData = [];
       let menuDocId = null;
@@ -36,7 +36,7 @@ export const createMenu = createAsyncThunk(
       };
 
       const { data } = await API.post(
-        `/v1/eats/stores/${restaurantId}/menus`,
+        `/api/v1/eats/stores/${restaurantId}/menus`,
         body,
         {
           headers: { "Content-Type": "application/json" },
@@ -63,7 +63,7 @@ export const addItemToMenu = createAsyncThunk(
       const body = { category, foodItemId };
 
       const { data } = await API.patch(
-        `/v1/eats/stores/${restaurantId}/menus/${menuId}/addItem`,
+        `/api/v1/eats/stores/${restaurantId}/menus/${menuId}/addItem`,
         body,
         {
           headers: { "Content-Type": "application/json" },

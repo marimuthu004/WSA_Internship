@@ -20,7 +20,7 @@ export const createOrder = (session_id) => async(dispatch) =>{
     try{
 
         dispatch(createOrderRequest());
-        const {data} = await api.post("/v1/eats/orders/new",{session_id},
+        const {data} = await api.post("/api/v1/eats/orders/new",{session_id},
             {
                 headers:{
                     "Content-Type": "application/json"
@@ -28,7 +28,7 @@ export const createOrder = (session_id) => async(dispatch) =>{
             }
         )
 
-        dispatch(createOrderSuccess(data))
+        dispatch(createOrderSuccess(data.order || data))
 
     }catch(error)
     {
@@ -42,7 +42,7 @@ export const payment = (items,restaurant) => async(dispatch) =>{
     try{
 
         dispatch(paymentRequest());
-        const {data} = await api.post("/v1/payment/process",{items, restaurant},
+        const {data} = await api.post("/api/v1/payment/process",{items, restaurant},
             {
                 headers:{
                     "Content-Type": "application/json"
@@ -67,7 +67,7 @@ export const myOrders = () => async(dispatch) =>{
     try{
 
         dispatch(myOrdersRequest());
-        const {data} = await api.get("/v1/eats/orders/me/myOrders")
+        const {data} = await api.get("/api/v1/eats/orders/me/myOrders")
 
         dispatch(myOrdersSuccess(data.orders))
 
@@ -82,7 +82,7 @@ export const getOrderDetails = (id) => async(dispatch) =>{
     try{
 
         dispatch(orderDetailsRequest());
-        const {data} = await api.get(`/v1/eats/orders/${id}`)
+        const {data} = await api.get(`/api/v1/eats/orders/${id}`)
 
         dispatch(orderDetailsSuccess(data.order))
 
