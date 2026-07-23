@@ -13,10 +13,12 @@ const errorMiddleware = require("./middlewares/errors");
 
 app.use(
   cors({
-    // origin: "https://genie-food-app.netlify.app",
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://order-it-one.vercel.app",
+    ],
     credentials: true,
-  }),
+  })
 );
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
