@@ -1,5 +1,3 @@
-const jwt = require("jsonwebtoken");
-
 const sendToken = (user, statusCode, res) => {
 
   const token = user.getJWTToken();
@@ -9,6 +7,8 @@ const sendToken = (user, statusCode, res) => {
       Date.now() + process.env.JWT_EXPIRE_TIME * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
+    secure: true,
+    sameSite: "none",
   };
 
   res.cookie("jwt", token, cookieOptions);

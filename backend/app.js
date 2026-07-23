@@ -10,6 +10,7 @@ const cors = require("cors");
 const aiRoutes = require("./routes/ai.routes");
 
 const errorMiddleware = require("./middlewares/errors");
+app.set("trust proxy", 1);
 
 app.use(
   cors({
